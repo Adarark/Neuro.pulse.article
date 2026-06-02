@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuralPulse — Inteligencia Artificial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#050810; --surface:#0d1117; --surface2:#131924; --border:rgba(99,179,237,0.12);
+  --border2:rgba(99,179,237,0.25); --accent:#4facfe; --accent2:#00f2fe;
+  --text:#e8edf5; --muted:#7a8599; --danger:#ff4d6d; --success:#36d399;
+  --warn:#fbbd23; --card:#0f1621; --radius:12px; --radius2:8px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;min-height:100vh;}
+h1,h2,h3,h4{font-family:'Syne',sans-serif;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(5,8,16,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:60px;}
+.nav-logo{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;cursor:pointer;}
+.nav-links{display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.9rem;font-weight:500;transition:color 0.2s;cursor:pointer;}
+.nav-links a:hover,.nav-links a.active{color:var(--text);}
+.nav-cta{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#050810;font-weight:700;padding:0.45rem 1.2rem;border-radius:30px;font-size:0.85rem;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:opacity 0.2s;}
+.nav-cta:hover{opacity:0.85;}
+.nav-user{display:flex;align-items:center;gap:0.75rem;}
+.nav-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;color:#050810;cursor:pointer;overflow:hidden;}
+.nav-avatar img{width:100%;height:100%;object-fit:cover;}
+.nav-username{font-size:0.9rem;font-weight:500;}
+.btn-logout{background:transparent;border:1px solid var(--border2);color:var(--muted);padding:0.35rem 0.9rem;border-radius:30px;font-size:0.82rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+.btn-logout:hover{border-color:var(--danger);color:var(--danger);}
+
+/* PAGES */
+.page{display:none;padding-top:60px;min-height:100vh;}
+.page.active{display:block;}
+
+/* HOME */
+.hero{padding:5rem 2rem 3rem;max-width:1200px;margin:0 auto;text-align:center;}
+.hero-tag{display:inline-block;background:rgba(79,172,254,0.1);border:1px solid var(--border2);color:var(--accent);padding:0.3rem 1rem;border-radius:30px;font-size:0.8rem;font-weight:600;margin-bottom:1.5rem;letter-spacing:0.08em;}
+.hero h1{font-size:clamp(2.5rem,5vw,4.5rem);font-weight:800;line-height:1.1;margin-bottom:1.2rem;}
+.hero h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero p{color:var(--muted);font-size:1.1rem;max-width:600px;margin:0 auto 2rem;}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#050810;font-weight:700;padding:0.7rem 2rem;border-radius:30px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:1rem;transition:opacity 0.2s;}
+.btn-primary:hover{opacity:0.85;}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border2);padding:0.7rem 2rem;border-radius:30px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:1rem;transition:all 0.2s;}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
+
+/* GRID */
+.section{max-width:1200px;margin:0 auto;padding:2rem;}
+.section-title{font-size:1.6rem;font-weight:700;margin-bottom:0.4rem;}
+.section-sub{color:var(--muted);margin-bottom:2rem;font-size:0.95rem;}
+.articles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem;}
+.article-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:border-color 0.2s,transform 0.2s;}
+.article-card:hover{border-color:var(--border2);transform:translateY(-3px);}
+.article-img{width:100%;height:180px;object-fit:cover;background:linear-gradient(135deg,#0d1117,#1a2744);display:flex;align-items:center;justify-content:center;font-size:3rem;}
+.article-body{padding:1.2rem;}
+.article-tag{display:inline-block;background:rgba(79,172,254,0.1);color:var(--accent);font-size:0.75rem;padding:0.2rem 0.7rem;border-radius:20px;margin-bottom:0.75rem;font-weight:600;}
+.article-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:0.5rem;line-height:1.3;}
+.article-excerpt{color:var(--muted);font-size:0.88rem;line-height:1.5;margin-bottom:1rem;}
+.article-meta{display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;color:var(--muted);}
+.article-author{display:flex;align-items:center;gap:0.5rem;}
+.author-dot{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;color:#050810;}
+
+/* ARTICLE DETAIL */
+.article-detail-hero{background:var(--card);border-bottom:1px solid var(--border);padding:3rem 2rem;}
+.article-detail-hero .inner{max-width:760px;margin:0 auto;}
+.back-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.9rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.4rem;transition:color 0.2s;padding:0;}
+.back-btn:hover{color:var(--accent);}
+.article-detail-body{max-width:760px;margin:2.5rem auto;padding:0 2rem;}
+.article-detail-body p{color:var(--muted);line-height:1.85;margin-bottom:1.3rem;}
+.article-detail-body h2{font-size:1.35rem;margin:2rem 0 0.8rem;color:var(--text);}
+
+/* AUTH */
+.auth-wrap{min-height:calc(100vh - 60px);display:flex;align-items:flex-start;justify-content:center;padding:2rem;}
+.auth-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2.5rem;width:100%;max-width:560px;}
+.auth-card h2{font-size:1.6rem;font-weight:800;margin-bottom:0.3rem;}
+.auth-card .subtitle{color:var(--muted);font-size:0.9rem;margin-bottom:2rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.form-group{margin-bottom:1.2rem;}
+.form-group label{display:block;font-size:0.83rem;font-weight:600;color:var(--muted);margin-bottom:0.4rem;letter-spacing:0.04em;text-transform:uppercase;}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius2);padding:0.65rem 0.9rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.95rem;transition:border-color 0.2s;outline:none;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);}
+.form-group select{cursor:pointer;}
+.form-group input::placeholder{color:var(--muted);}
+.form-hint{font-size:0.78rem;color:var(--muted);margin-top:0.3rem;}
+.form-error{font-size:0.78rem;color:var(--danger);margin-top:0.3rem;display:none;}
+.form-error.show{display:block;}
+
+/* FILE UPLOAD */
+.file-upload-area{border:2px dashed var(--border2);border-radius:var(--radius2);padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--surface2);}
+.file-upload-area:hover{border-color:var(--accent);background:rgba(79,172,254,0.05);}
+.file-upload-area input[type=file]{display:none;}
+.file-upload-area .upload-icon{font-size:2rem;margin-bottom:0.5rem;}
+.file-upload-area p{color:var(--muted);font-size:0.85rem;}
+.file-upload-area .file-name{color:var(--accent);font-size:0.82rem;margin-top:0.4rem;word-break:break-all;}
+.file-preview{margin-top:0.7rem;}
+.file-preview img{max-width:120px;max-height:120px;border-radius:var(--radius2);border:1px solid var(--border2);object-fit:cover;}
+.profile-photo-preview{width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);margin-top:0.5rem;}
+
+/* TERMS */
+.terms-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius2);padding:1rem;max-height:180px;overflow-y:auto;font-size:0.82rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;}
+.terms-box h4{color:var(--text);margin-bottom:0.5rem;font-size:0.9rem;}
+.terms-box p{margin-bottom:0.5rem;}
+
+/* SIGNATURE */
+.sig-area{border:1px dashed var(--border2);border-radius:var(--radius2);padding:1.2rem;margin-bottom:1rem;background:var(--surface);}
+.sig-area label{font-size:0.83rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.04em;display:block;margin-bottom:0.6rem;}
+.sig-area canvas{width:100%;height:100px;display:block;background:var(--surface2);border-radius:6px;cursor:crosshair;touch-action:none;}
+.sig-controls{display:flex;gap:0.5rem;margin-top:0.5rem;flex-wrap:wrap;}
+.sig-controls button{background:transparent;border:1px solid var(--border);color:var(--muted);padding:0.3rem 0.7rem;border-radius:6px;font-size:0.78rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+.sig-controls button:hover{border-color:var(--border2);color:var(--text);}
+.sig-char-counter{font-size:0.75rem;margin-top:0.3rem;transition:color 0.2s;}
+.sig-char-counter.ok{color:var(--success);}
+.sig-char-counter.bad{color:var(--danger);}
+
+.check-row{display:flex;align-items:flex-start;gap:0.7rem;margin-bottom:1rem;}
+.check-row input[type=checkbox]{width:18px;height:18px;margin-top:2px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;}
+.check-row label{font-size:0.88rem;color:var(--muted);cursor:pointer;}
+.check-row label a{color:var(--accent);}
+.sig-preview{font-size:1.4rem;font-family:cursive;color:var(--accent);padding:0.5rem 0;min-height:40px;}
+
+/* 2FA */
+.otp-row{display:flex;gap:0.7rem;justify-content:center;margin:1.5rem 0;}
+.otp-row input{width:48px;height:56px;text-align:center;font-size:1.4rem;font-weight:700;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius2);color:var(--text);font-family:'Syne',sans-serif;outline:none;transition:border-color 0.2s;}
+.otp-row input:focus{border-color:var(--accent);}
+.method-toggle{display:flex;gap:0.5rem;margin-bottom:1.5rem;}
+.method-btn{flex:1;padding:0.6rem;border-radius:var(--radius2);border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.method-btn.active{background:rgba(79,172,254,0.1);border-color:var(--accent);color:var(--accent);}
+.qa-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius2);padding:1rem;margin-bottom:1rem;}
+.qa-card p{font-size:0.85rem;color:var(--muted);margin-bottom:0.5rem;}
+
+/* PROGRESS */
+.progress-steps{display:flex;gap:0;margin-bottom:2rem;}
+.step{flex:1;text-align:center;position:relative;}
+.step-num{width:28px;height:28px;border-radius:50%;background:var(--surface2);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;margin:0 auto 0.3rem;color:var(--muted);transition:all 0.3s;}
+.step.done .step-num{background:var(--success);border-color:var(--success);color:#050810;}
+.step.active .step-num{background:rgba(79,172,254,0.15);border-color:var(--accent);color:var(--accent);}
+.step-label{font-size:0.72rem;color:var(--muted);}
+.step.active .step-label{color:var(--accent);}
+.step::before{content:'';position:absolute;top:14px;left:calc(-50% + 14px);right:calc(50% + 14px);height:1.5px;background:var(--border);}
+.step:first-child::before{display:none;}
+
+/* ALERT */
+.alert{padding:0.8rem 1rem;border-radius:var(--radius2);font-size:0.88rem;margin-bottom:1.2rem;display:none;}
+.alert.show{display:block;}
+.alert-success{background:rgba(54,211,153,0.1);border:1px solid rgba(54,211,153,0.3);color:var(--success);}
+.alert-error{background:rgba(255,77,109,0.1);border:1px solid rgba(255,77,109,0.3);color:var(--danger);}
+.alert-info{background:rgba(79,172,254,0.1);border:1px solid var(--border2);color:var(--accent);}
+
+/* PROFILE */
+.profile-wrap{max-width:900px;margin:0 auto;padding:2rem;}
+.profile-header{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;}
+.profile-avatar-lg{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.5rem;color:#050810;flex-shrink:0;overflow:hidden;border:3px solid var(--accent);}
+.profile-avatar-lg img{width:100%;height:100%;object-fit:cover;}
+.profile-info h2{font-size:1.4rem;margin-bottom:0.2rem;}
+.profile-info p{color:var(--muted);font-size:0.9rem;}
+.profile-badge{display:inline-flex;align-items:center;gap:0.4rem;background:rgba(54,211,153,0.1);border:1px solid rgba(54,211,153,0.3);color:var(--success);font-size:0.75rem;padding:0.25rem 0.7rem;border-radius:20px;margin-top:0.5rem;}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+.profile-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;}
+.profile-section h3{font-size:1rem;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.profile-field{display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--border);font-size:0.88rem;}
+.profile-field:last-child{border-bottom:none;}
+.profile-field span:first-child{color:var(--muted);}
+.edit-btn{background:transparent;border:1px solid var(--border2);color:var(--accent);padding:0.2rem 0.6rem;border-radius:6px;font-size:0.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+.edit-btn:hover{background:rgba(79,172,254,0.1);}
+.profile-tabs{display:flex;gap:0.5rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+.ptab{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:0.45rem 1rem;border-radius:20px;font-size:0.85rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+.ptab.active{background:rgba(79,172,254,0.1);border-color:var(--accent);color:var(--accent);}
+
+/* EVENTS */
+.events-table{width:100%;border-collapse:collapse;font-size:0.85rem;}
+.events-table th{text-align:left;padding:0.6rem 0.8rem;border-bottom:1px solid var(--border);color:var(--muted);font-weight:600;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.04em;}
+.events-table td{padding:0.6rem 0.8rem;border-bottom:1px solid var(--border);color:var(--text);}
+.events-table tr:last-child td{border-bottom:none;}
+.events-table tr:hover td{background:rgba(79,172,254,0.03);}
+.event-badge{display:inline-block;padding:0.15rem 0.5rem;border-radius:10px;font-size:0.72rem;font-weight:600;}
+.ev-login{background:rgba(79,172,254,0.15);color:var(--accent);}
+.ev-register{background:rgba(54,211,153,0.15);color:var(--success);}
+.ev-edit{background:rgba(251,189,35,0.15);color:var(--warn);}
+.ev-article{background:rgba(150,100,255,0.15);color:#b389ff;}
+.ev-logout{background:rgba(255,77,109,0.15);color:var(--danger);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(5,8,16,0.85);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem;}
+.modal-overlay.show{display:flex;}
+.modal-box{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:2rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;}
+.modal-box h3{font-size:1.3rem;margin-bottom:0.5rem;}
+.modal-box p.sub{color:var(--muted);font-size:0.88rem;margin-bottom:1.5rem;}
+.modal-close{position:absolute;top:1rem;right:1rem;background:transparent;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;}
+
+/* ARTICLE FORM */
+.article-form-area{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.5rem;}
+.article-form-area textarea{resize:vertical;min-height:120px;}
+
+/* SUBMIT */
+.submit-btn{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#050810;font-weight:700;padding:0.8rem;border-radius:30px;border:none;cursor:pointer;font-family:'Syne',sans-serif;font-size:1rem;margin-top:0.5rem;transition:opacity 0.2s;}
+.submit-btn:hover{opacity:0.88;}
+.submit-btn:disabled{opacity:0.5;cursor:not-allowed;}
+.link-btn{background:none;border:none;color:var(--accent);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.88rem;padding:0;text-decoration:underline;}
+.divider{text-align:center;color:var(--muted);font-size:0.85rem;margin:1.2rem 0;position:relative;}
+.divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border);z-index:0;}
+.divider span{background:var(--card);padding:0 0.8rem;position:relative;z-index:1;}
+
+/* CATEGORIES */
+.cats{display:flex;gap:0.7rem;flex-wrap:wrap;margin-bottom:2rem;}
+.cat-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:0.4rem 1rem;border-radius:20px;font-size:0.85rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+.cat-btn.active,.cat-btn:hover{background:rgba(79,172,254,0.1);border-color:var(--accent);color:var(--accent);}
+
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:0.85rem;margin-top:4rem;}
+
+@media(max-width:600px){
+  .form-row{grid-template-columns:1fr;}
+  .profile-grid{grid-template-columns:1fr;}
+  .hero h1{font-size:2.2rem;}
+  .articles-grid{grid-template-columns:1fr;}
+  .nav-links{gap:0.7rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">NeuralPulse</div>
+  <div class="nav-links" id="navLinks">
+    <a onclick="showPage('home')" id="navHome">Inicio</a>
+    <a onclick="showPage('articles')" id="navArticles">Artículos</a>
+    <a onclick="requireAuth('profile')" id="navProfile">Mi Perfil</a>
+    <a onclick="requireAuth('write')" id="navWrite" style="display:none">Escribir</a>
+    <button class="nav-cta" id="navLoginBtn" onclick="showPage('login')">Iniciar Sesión</button>
+    <div class="nav-user" id="navUser" style="display:none">
+      <div class="nav-avatar" id="navAvatar" onclick="requireAuth('profile')"></div>
+      <span class="nav-username" id="navName"></span>
+      <button class="btn-logout" onclick="logout()">Salir</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HOME ===== -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-tag">🤖 El futuro es ahora</div>
+    <h1>Explora el mundo de la<br><span>Inteligencia Artificial</span></h1>
+    <p>Artículos, investigaciones y noticias sobre IA, machine learning y el futuro tecnológico — escritos por expertos.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showPage('articles')">Leer Artículos</button>
+      <button class="btn-ghost" onclick="showPage('register')">Crear Cuenta</button>
+    </div>
+  </div>
+  <div class="section">
+    <h2 class="section-title">Artículos Destacados</h2>
+    <p class="section-sub">Las historias más relevantes de esta semana</p>
+    <div class="articles-grid" id="featuredGrid"></div>
+  </div>
+  <footer>© 2025 NeuralPulse — Todos los derechos reservados</footer>
+</div>
+
+<!-- ===== ARTICLES ===== -->
+<div class="page" id="page-articles">
+  <div class="section" style="padding-top:2rem">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:0.5rem">
+      <div>
+        <h2 class="section-title">Todos los Artículos</h2>
+        <p class="section-sub" style="margin-bottom:0">Mantente al día con los avances en IA</p>
+      </div>
+      <button class="btn-primary" onclick="requireAuth('write')" id="writeBtn" style="display:none">+ Escribir Artículo</button>
+    </div>
+    <div style="margin-bottom:1.5rem"></div>
+    <div class="cats" id="categoriesBar"></div>
+    <div class="articles-grid" id="allArticlesGrid"></div>
+  </div>
+  <footer>© 2025 NeuralPulse</footer>
+</div>
+
+<!-- ===== ARTICLE DETAIL ===== -->
+<div class="page" id="page-article-detail">
+  <div class="article-detail-hero">
+    <div class="inner">
+      <button class="back-btn" onclick="showPage('articles')">← Volver a artículos</button>
+      <div class="article-tag" id="detailTag"></div>
+      <h1 id="detailTitle" style="font-size:2rem;margin-bottom:1rem;line-height:1.2"></h1>
+      <div style="display:flex;gap:1.5rem;color:var(--muted);font-size:0.88rem;flex-wrap:wrap;align-items:center">
+        <span id="detailAuthor"></span>
+        <span id="detailDate"></span>
+        <span id="detailRead"></span>
+        <button id="editArticleBtn" class="edit-btn" onclick="startEditArticle()" style="display:none">✏️ Editar</button>
+      </div>
+    </div>
+  </div>
+  <div class="article-detail-body" id="detailBody"></div>
+</div>
+
+<!-- ===== WRITE ARTICLE ===== -->
+<div class="page" id="page-write">
+  <div class="section" style="padding-top:2rem">
+    <h2 class="section-title">✍️ <span id="writePageTitle">Nuevo Artículo</span></h2>
+    <p class="section-sub">Tu artículo requiere firma electrónica para ser publicado</p>
+    <div class="alert alert-error" id="writeError"></div>
+    <div class="article-form-area">
+      <div class="form-group">
+        <label>Título *</label>
+        <input type="text" id="wTitle" placeholder="Título del artículo">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Categoría *</label>
+          <select id="wCat">
+            <option value="ML">Machine Learning</option>
+            <option value="Vision">Visión Artificial</option>
+            <option value="Robotics">Robótica</option>
+            <option value="Health">Salud</option>
+            <option value="Ethics">Ética IA</option>
+            <option value="Neuro">Neurotech</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ícono/Emoji *</label>
+          <input type="text" id="wEmoji" placeholder="🧠">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Resumen *</label>
+        <input type="text" id="wExcerpt" placeholder="Breve descripción del artículo (máx. 150 caracteres)">
+      </div>
+      <div class="form-group">
+        <label>Contenido (párrafos separados por líneas en blanco) *</label>
+        <textarea id="wContent" placeholder="Escribe el contenido del artículo aquí...&#10;&#10;Párrafo 2..."></textarea>
+      </div>
+    </div>
+
+    <div class="article-form-area">
+      <h3 style="margin-bottom:1rem;font-size:1rem">🔐 Firma Electrónica Requerida</h3>
+      <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1rem">Firma este artículo con tu firma electrónica. Mínimo 20 caracteres, sin espacios.</p>
+      <div id="writeSigArea"></div>
+    </div>
+
+    <div style="display:flex;gap:1rem">
+      <button class="btn-ghost" onclick="showPage('articles')" style="flex:1;padding:0.8rem">Cancelar</button>
+      <button class="submit-btn" onclick="submitArticle()" style="margin-top:0;flex:2" id="writeSubmitBtn">Publicar Artículo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LOGIN ===== -->
+<div class="page" id="page-login">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <h2>Bienvenido de vuelta</h2>
+      <p class="subtitle">Inicia sesión en tu cuenta NeuralPulse</p>
+      <div class="alert alert-error" id="loginError"></div>
+      <div class="form-group">
+        <label>Correo Electrónico</label>
+        <input type="email" id="loginEmail" placeholder="tu@correo.com">
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="loginPassword" placeholder="••••••••">
+      </div>
+      <button class="submit-btn" onclick="doLogin()">Iniciar Sesión</button>
+      <div class="divider"><span>¿No tienes cuenta?</span></div>
+      <div style="text-align:center">
+        <button class="link-btn" onclick="showPage('register')">Crear cuenta gratis</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 2FA ===== -->
+<div class="page" id="page-2fa">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <h2>Verificación de Identidad</h2>
+      <p class="subtitle">Segundo factor de autenticación requerido</p>
+      <div class="method-toggle">
+        <button class="method-btn active" id="methodCode" onclick="setMethod('code')">📱 Código SMS/Email</button>
+        <button class="method-btn" id="methodQA" onclick="setMethod('qa')">🔐 Pregunta Secreta</button>
+      </div>
+      <div id="codeMethod">
+        <div class="alert alert-info show" id="codeInfo"></div>
+        <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1rem">Ingresa el código de 6 dígitos enviado:</p>
+        <div class="otp-row">
+          <input type="text" maxlength="1" id="otp0" oninput="otpNext(0)">
+          <input type="text" maxlength="1" id="otp1" oninput="otpNext(1)">
+          <input type="text" maxlength="1" id="otp2" oninput="otpNext(2)">
+          <input type="text" maxlength="1" id="otp3" oninput="otpNext(3)">
+          <input type="text" maxlength="1" id="otp4" oninput="otpNext(4)">
+          <input type="text" maxlength="1" id="otp5" oninput="otpNext(5)">
+        </div>
+        <p style="font-size:0.8rem;color:var(--muted);text-align:center;margin-bottom:1rem">¿No recibiste el código? <button class="link-btn" onclick="resendCode()">Reenviar</button></p>
+        <button class="submit-btn" onclick="verifyCode()">Verificar Código</button>
+      </div>
+      <div id="qaMethod" style="display:none">
+        <div class="qa-card"><p id="secQuestion" style="font-weight:600;color:var(--text)"></p></div>
+        <div class="form-group">
+          <label>Tu Respuesta</label>
+          <input type="text" id="secAnswer" placeholder="Escribe tu respuesta...">
+          <p class="form-hint">No distingue mayúsculas</p>
+        </div>
+        <div class="alert alert-error" id="qaError"></div>
+        <button class="submit-btn" onclick="verifyQA()">Confirmar Identidad</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== REGISTER ===== -->
+<div class="page" id="page-register">
+  <div class="auth-wrap" style="align-items:flex-start;padding-top:2rem">
+    <div class="auth-card" style="max-width:580px">
+      <h2>Crear Cuenta</h2>
+      <p class="subtitle">Únete a la comunidad NeuralPulse</p>
+      <div class="progress-steps">
+        <div class="step active" id="step1"><div class="step-num">1</div><div class="step-label">Datos</div></div>
+        <div class="step" id="step2"><div class="step-num">2</div><div class="step-label">Archivos</div></div>
+        <div class="step" id="step3"><div class="step-num">3</div><div class="step-label">Seguridad</div></div>
+        <div class="step" id="step4"><div class="step-num">4</div><div class="step-label">Términos</div></div>
+      </div>
+      <div class="alert alert-error" id="regError"></div>
+
+      <!-- STEP 1 -->
+      <div id="regStep1">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre *</label>
+            <input type="text" id="rNombre" placeholder="Juan">
+          </div>
+          <div class="form-group">
+            <label>Apellido *</label>
+            <input type="text" id="rApellido" placeholder="Pérez">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Cédula de Identidad *</label>
+          <input type="text" id="rCedula" placeholder="8-123-4567 o E-8-1234">
+          <p class="form-hint">Número de cédula o pasaporte</p>
+        </div>
+        <div class="form-group">
+          <label>Correo Electrónico *</label>
+          <input type="email" id="rEmail" placeholder="juan@gmail.com">
+          <p class="form-hint">Debe contener @ y dominio válido (gmail, hotmail, yahoo, etc.)</p>
+          <div class="form-error" id="emailErr">Correo inválido. Ej: nombre@gmail.com</div>
+        </div>
+        <div class="form-group">
+          <label>Fecha de Nacimiento *</label>
+          <input type="date" id="rFecha">
+        </div>
+        <div class="form-group">
+          <label>Número de Teléfono *</label>
+          <input type="tel" id="rTelefono" placeholder="+507 6000-0000">
+          <p class="form-hint">Se usará para verificación por SMS</p>
+        </div>
+        <div class="form-group">
+          <label>Contraseña *</label>
+          <input type="password" id="rPassword" placeholder="Mínimo 8 caracteres">
+        </div>
+        <div class="form-group">
+          <label>Confirmar Contraseña *</label>
+          <input type="password" id="rPassword2" placeholder="Repite la contraseña">
+        </div>
+        <button class="submit-btn" onclick="regNext1()">Continuar →</button>
+      </div>
+
+      <!-- STEP 2: FILES -->
+      <div id="regStep2" style="display:none">
+        <p style="color:var(--muted);font-size:0.88rem;margin-bottom:1.5rem">Sube tu foto de cédula y foto de perfil.</p>
+        <div class="form-group">
+          <label>Foto de Cédula * (máx. 1 MB)</label>
+          <div class="file-upload-area" onclick="document.getElementById('cedFile').click()">
+            <div class="upload-icon">🪪</div>
+            <p>Haz clic o arrastra tu cédula aquí</p>
+            <p style="font-size:0.75rem;margin-top:0.2rem">JPG, PNG, PDF — máx. 1 MB</p>
+            <div class="file-name" id="cedFileName"></div>
+            <input type="file" id="cedFile" accept="image/*,.pdf" onchange="handleCedFile(event)">
+          </div>
+          <div class="file-preview" id="cedPreview"></div>
+        </div>
+        <div class="form-group" style="margin-top:1rem">
+          <label>Foto de Perfil (máx. 3 MB, formato LinkedIn)</label>
+          <div class="file-upload-area" onclick="document.getElementById('profFile').click()">
+            <div class="upload-icon">📸</div>
+            <p>Foto de perfil profesional</p>
+            <p style="font-size:0.75rem;margin-top:0.2rem">JPG, PNG — máx. 3 MB — recomendado 400×400px</p>
+            <div class="file-name" id="profFileName"></div>
+            <input type="file" id="profFile" accept="image/*" onchange="handleProfFile(event)">
+          </div>
+          <div class="file-preview" id="profPreview"></div>
+        </div>
+        <div style="display:flex;gap:1rem;margin-top:0.5rem">
+          <button class="btn-ghost" onclick="showRegStep(1)" style="flex:1;padding:0.8rem">← Atrás</button>
+          <button class="submit-btn" onclick="regNext2()" style="margin-top:0;flex:2">Continuar →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: SECURITY -->
+      <div id="regStep3" style="display:none">
+        <p style="color:var(--muted);font-size:0.88rem;margin-bottom:1.5rem">Configura tu segundo factor de autenticación.</p>
+        <div class="form-group">
+          <label>Pregunta de Seguridad</label>
+          <select id="rSecQuestion">
+            <option value="mascota">¿Cuál es el nombre de tu primera mascota?</option>
+            <option value="madre">¿Cuál es el apellido de soltera de tu madre?</option>
+            <option value="ciudad">¿En qué ciudad naciste?</option>
+            <option value="colegio">¿Cuál fue el nombre de tu primer colegio?</option>
+            <option value="amigo">¿Cuál es el nombre de tu mejor amigo de la infancia?</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Respuesta Secreta *</label>
+          <input type="text" id="rSecAnswer" placeholder="Tu respuesta...">
+          <p class="form-hint">No distingue mayúsculas. Guárdala en un lugar seguro.</p>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius2);padding:1rem;margin-bottom:1.2rem">
+          <p style="font-size:0.85rem;color:var(--muted);margin-bottom:0.5rem">📱 <strong style="color:var(--text)">Verificación por SMS/Email</strong></p>
+          <p style="font-size:0.82rem;color:var(--muted)">Al iniciar sesión podrás recibir un código de verificación (simulado en demo).</p>
+        </div>
+        <div style="display:flex;gap:1rem">
+          <button class="btn-ghost" onclick="showRegStep(2)" style="flex:1;padding:0.8rem">← Atrás</button>
+          <button class="submit-btn" onclick="regNext3()" style="margin-top:0;flex:2">Continuar →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: TERMS + SIGNATURE -->
+      <div id="regStep4" style="display:none">
+        <p style="color:var(--muted);font-size:0.88rem;margin-bottom:1rem">Lee y acepta los términos. Tu firma tiene validez legal.</p>
+        <div class="terms-box">
+          <h4>Términos y Condiciones de NeuralPulse</h4>
+          <p>Última actualización: enero 2025</p>
+          <p>Al registrarte en NeuralPulse aceptas los presentes términos. Este sitio ofrece contenido educativo e informativo sobre inteligencia artificial.</p>
+          <p><strong>1. USO ACEPTABLE:</strong> El usuario se compromete a no distribuir, reproducir ni comercializar el contenido sin autorización expresa.</p>
+          <p><strong>2. PRIVACIDAD:</strong> Tus datos personales serán tratados conforme a la Ley 81 de Protección de Datos de Panamá.</p>
+          <p><strong>3. CUENTA:</strong> Eres responsable de mantener la confidencialidad de tu contraseña.</p>
+          <p><strong>4. PROPIEDAD INTELECTUAL:</strong> Todo el contenido es propiedad de sus respectivos autores.</p>
+          <p><strong>5. FIRMA ELECTRÓNICA:</strong> La firma no puede contener espacios y debe tener mínimo 20 caracteres. Tiene validez legal conforme a la Ley 51 de 2008 de Panamá.</p>
+        </div>
+        <div class="check-row">
+          <input type="checkbox" id="chkTerms">
+          <label for="chkTerms">He leído y acepto los <a href="#" onclick="return false">Términos y Condiciones</a> y la <a href="#" onclick="return false">Política de Privacidad</a></label>
+        </div>
+        <div id="regSigContainer"></div>
+        <div class="alert alert-info" id="regSigInfo" style="font-size:0.82rem"></div>
+        <div style="display:flex;gap:1rem;margin-top:0.5rem">
+          <button class="btn-ghost" onclick="showRegStep(3)" style="flex:1;padding:0.8rem">← Atrás</button>
+          <button class="submit-btn" onclick="doRegister()" style="margin-top:0;flex:2">Crear Cuenta</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PROFILE ===== -->
+<div class="page" id="page-profile">
+  <div class="profile-wrap">
+    <div class="profile-header">
+      <div class="profile-avatar-lg" id="profileAvatarLg"></div>
+      <div class="profile-info">
+        <h2 id="profileFullName"></h2>
+        <p id="profileEmail"></p>
+        <div class="profile-badge">✓ Firma electrónica registrada · Cuenta verificada</div>
+      </div>
+    </div>
+    <div class="profile-tabs">
+      <button class="ptab active" onclick="showProfileTab('info')">📋 Información</button>
+      <button class="ptab" onclick="showProfileTab('security')">🔐 Seguridad</button>
+      <button class="ptab" onclick="showProfileTab('articles')">📝 Mis Artículos</button>
+      <button class="ptab" onclick="showProfileTab('events')">📊 Registro de Eventos</button>
+    </div>
+    <!-- INFO TAB -->
+    <div id="ptab-info">
+      <div class="profile-grid">
+        <div class="profile-section">
+          <h3>Información Personal <button class="edit-btn" onclick="openEditModal('personal')">Editar</button></h3>
+          <div class="profile-field"><span>Nombre</span><span id="pfNombre"></span></div>
+          <div class="profile-field"><span>Apellido</span><span id="pfApellido"></span></div>
+          <div class="profile-field"><span>Cédula</span><span id="pfCedula"></span></div>
+          <div class="profile-field"><span>Correo</span><span id="pfEmail"></span></div>
+          <div class="profile-field"><span>Teléfono</span><span id="pfTelefono"></span></div>
+          <div class="profile-field"><span>Fecha nac.</span><span id="pfFecha"></span></div>
+          <div class="profile-field"><span>Registro</span><span id="pfRegistro"></span></div>
+        </div>
+        <div class="profile-section">
+          <h3>Documentos</h3>
+          <div style="margin-bottom:1rem">
+            <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.5rem">Foto de cédula</p>
+            <div id="pfCedDoc" style="font-size:0.85rem;color:var(--muted)">—</div>
+          </div>
+          <div>
+            <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.5rem">Foto de perfil</p>
+            <div id="pfProfPhoto"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- SECURITY TAB -->
+    <div id="ptab-security" style="display:none">
+      <div class="profile-grid">
+        <div class="profile-section">
+          <h3>Autenticación</h3>
+          <div class="profile-field"><span>2FA Pregunta</span><span style="color:var(--success)">✓ Activo</span></div>
+          <div class="profile-field"><span>2FA SMS/Email</span><span style="color:var(--success)">✓ Activo</span></div>
+          <div class="profile-field"><span>Firma electrónica</span><span style="color:var(--success)">✓ Registrada</span></div>
+          <div class="profile-field"><span>Términos aceptados</span><span style="color:var(--success)">✓ Sí</span></div>
+        </div>
+        <div class="profile-section">
+          <h3>Cambiar Contraseña <button class="edit-btn" onclick="openEditModal('password')">Cambiar</button></h3>
+          <p style="font-size:0.85rem;color:var(--muted)">Para cambiar tu contraseña necesitarás confirmar tu firma electrónica.</p>
+        </div>
+      </div>
+    </div>
+    <!-- MY ARTICLES TAB -->
+    <div id="ptab-articles" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+        <h3 style="font-size:1rem">Mis Artículos Publicados</h3>
+        <button class="btn-primary" onclick="requireAuth('write')" style="padding:0.4rem 1rem;font-size:0.85rem">+ Nuevo</button>
+      </div>
+      <div id="myArticlesList"></div>
+    </div>
+    <!-- EVENTS TAB -->
+    <div id="ptab-events" style="display:none">
+      <div class="profile-section" style="overflow-x:auto">
+        <h3>Registro de Eventos del Sistema</h3>
+        <table class="events-table">
+          <thead>
+            <tr>
+              <th>Fecha/Hora</th>
+              <th>Evento</th>
+              <th>Detalle</th>
+              <th>IP</th>
+            </tr>
+          </thead>
+          <tbody id="eventsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:2rem">
+      <button class="btn-ghost" onclick="logout()" style="padding:0.6rem 2rem">Cerrar Sesión</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SUCCESS ===== -->
+<div class="page" id="page-success">
+  <div class="auth-wrap">
+    <div class="auth-card" style="text-align:center">
+      <div style="font-size:4rem;margin-bottom:1rem">🎉</div>
+      <h2 style="margin-bottom:0.5rem">¡Cuenta Creada!</h2>
+      <p class="subtitle">Bienvenido a NeuralPulse. Tu firma electrónica ha sido registrada.</p>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius2);padding:1rem;margin:1.5rem 0;font-size:0.85rem;color:var(--muted);text-align:left">
+        <p>✅ Cuenta creada</p>
+        <p>✅ Cédula cargada</p>
+        <p>✅ Firma electrónica registrada</p>
+        <p>✅ Términos y condiciones aceptados</p>
+        <p>✅ Pregunta de seguridad configurada</p>
+      </div>
+      <button class="submit-btn" onclick="showPage('home')">Ir al Inicio</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal-box" style="position:relative">
+    <h3 id="editModalTitle">Editar Información</h3>
+    <p class="sub">Para modificar datos debes confirmar tu firma electrónica.</p>
+    <div id="editModalContent"></div>
+    <div id="editSigContainer" style="margin-top:1rem"></div>
+    <div class="alert alert-error" id="editError" style="margin-top:0.7rem"></div>
+    <div style="display:flex;gap:0.8rem;margin-top:1rem">
+      <button class="btn-ghost" onclick="closeEditModal()" style="flex:1;padding:0.7rem">Cancelar</button>
+      <button class="submit-btn" onclick="confirmEdit()" style="margin-top:0;flex:2" id="editConfirmBtn">Guardar Cambios</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// =========== DB (localStorage as mock DB) ===========
+const DB = {
+  getUser: email => { const d = localStorage.getItem('np_u_'+email); return d ? JSON.parse(d) : null; },
+  saveUser: u => localStorage.setItem('np_u_'+u.email, JSON.stringify(u)),
+  getSession: () => { const d = localStorage.getItem('np_session'); return d ? JSON.parse(d) : null; },
+  saveSession: u => localStorage.setItem('np_session', JSON.stringify(u)),
+  clearSession: () => localStorage.removeItem('np_session'),
+  getArticles: () => { const d = localStorage.getItem('np_articles'); return d ? JSON.parse(d) : BUILTIN_ARTICLES.map(a=>({...a})); },
+  saveArticles: list => localStorage.setItem('np_articles', JSON.stringify(list)),
+  getEvents: email => { const d = localStorage.getItem('np_events_'+email); return d ? JSON.parse(d) : []; },
+  addEvent: (email, type, detail) => {
+    const evs = DB.getEvents(email);
+    evs.unshift({ ts: new Date().toLocaleString('es-PA'), type, detail, ip: '192.168.'+Math.floor(Math.random()*255)+'.'+Math.floor(Math.random()*255) });
+    if(evs.length > 100) evs.pop();
+    localStorage.setItem('np_events_'+email, JSON.stringify(evs));
+  }
+};
+
+const BUILTIN_ARTICLES = [
+  { id:1, tag:'Machine Learning', emoji:'🧠', title:'GPT-5 y el futuro del lenguaje natural', excerpt:'OpenAI lanza su modelo más avanzado con capacidades de razonamiento sin precedentes.', author:'María García', authorEmail:'', date:'15 ene 2025', read:'5 min', cat:'ML', content:['La presentación de GPT-5 marca un hito sin precedentes en la historia del procesamiento del lenguaje natural. El nuevo modelo de OpenAI no solo supera a sus predecesores en benchmarks estándar, sino que introduce capacidades de razonamiento multimodal que difuminan aún más la línea entre la inteligencia artificial y la humana.','Entre las características más destacadas se encuentra su capacidad para mantener coherencia en conversaciones de más de 200,000 tokens, resolver problemas matemáticos complejos con explicaciones paso a paso, y generar código funcional en más de 50 lenguajes de programación.','Los investigadores de OpenAI señalan que el salto cualitativo más significativo reside en la comprensión contextual profunda.']},
+  { id:2, tag:'Visión Artificial', emoji:'👁️', title:'DALL-E 4 genera imágenes fotorrealistas en tiempo real', excerpt:'El nuevo modelo de generación de imágenes alcanza una calidad visual indistinguible de la fotografía.', author:'Carlos López', authorEmail:'', date:'12 ene 2025', read:'4 min', cat:'Vision', content:['La nueva versión de DALL-E establece un nuevo estándar en la generación de imágenes por inteligencia artificial. Con una resolución nativa de 4K y tiempos de generación menores a dos segundos, el modelo abre posibilidades inéditas para creativos y diseñadores.','La tecnología subyacente combina redes neuronales difusas con un sistema de comprensión semántica avanzada.']},
+  { id:3, tag:'Robótica', emoji:'🤖', title:'Boston Dynamics presenta robot humanoide autónomo', excerpt:'Atlas puede ahora aprender nuevas tareas con solo observar a humanos durante minutos.', author:'Ana Rodríguez', authorEmail:'', date:'10 ene 2025', read:'6 min', cat:'Robotics', content:['Boston Dynamics ha dado un paso revolucionario con la presentación de la nueva generación de Atlas. A diferencia de sus predecesores que requerían programación explícita, el nuevo Atlas incorpora un sistema de aprendizaje por imitación.','La tecnología de sensores hápticos distribuidos por todo el cuerpo del robot permite una percepción táctil casi comparable a la humana.']},
+  { id:4, tag:'Salud', emoji:'🏥', title:'IA diagnostica cáncer con 99% de precisión', excerpt:'Un nuevo modelo de deep learning supera a radiólogos expertos en detección temprana.', author:'Dr. Pedro Sánchez', authorEmail:'', date:'8 ene 2025', read:'7 min', cat:'Health', content:['Un consorcio de universidades ha publicado resultados que podrían transformar el diagnóstico médico. Su modelo, entrenado con más de 50 millones de imágenes, detecta lesiones cancerígenas con una precisión del 99.3%.']},
+  { id:5, tag:'Ética IA', emoji:'⚖️', title:'La UE aprueba el primer reglamento global de IA', excerpt:'El marco regulatorio establece categorías de riesgo y obligaciones para desarrolladores y usuarios.', author:'Laura Martínez', authorEmail:'', date:'5 ene 2025', read:'8 min', cat:'Ethics', content:['El Parlamento Europeo ha dado luz verde al primer reglamento integral sobre inteligencia artificial. La norma establece un sistema de clasificación basado en niveles de riesgo.']},
+  { id:6, tag:'Neurotech', emoji:'🔬', title:'Neuralink implanta chip en su primer paciente humano', excerpt:'El voluntario ya puede controlar una computadora con el pensamiento.', author:'Sofía Herrera', authorEmail:'', date:'3 ene 2025', read:'5 min', cat:'Neuro', content:['Neuralink ha alcanzado su objetivo más ambicioso: implantar su interfaz cerebro-computadora N1 en un ser humano. El paciente puede ahora mover el cursor de su computadora con el pensamiento.']}
+];
+
+const CATS = ['Todos','ML','Vision','Robotics','Health','Ethics','Neuro'];
+let currentUser = null, pendingUser = null, selectedCat = 'Todos';
+let generatedOTP = null;
+let pendingEditType = null;
+let editingArticleId = null;
+
+// ---- SIG INSTANCES ----
+const sigInstances = {};
+
+function createSig(containerId, instanceKey) {
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  container.innerHTML = `
+    <div class="sig-area" id="sigArea_${instanceKey}">
+      <label>✍️ Firma Electrónica</label>
+      <p style="font-size:0.78rem;color:var(--muted);margin-bottom:0.7rem">Sin espacios · Mínimo 20 caracteres (letras, números o signos)</p>
+      <div style="display:flex;gap:0.5rem;margin-bottom:0.5rem">
+        <button type="button" class="sig-controls" style="all:unset" onclick="setSigMode('${instanceKey}','draw')">
+          <span id="sigModeDrawBtn_${instanceKey}" style="background:transparent;border:1px solid var(--border2);color:var(--accent);padding:0.3rem 0.7rem;border-radius:6px;font-size:0.78rem;cursor:pointer;font-family:DM Sans,sans-serif;">✏️ Dibujar</span>
+        </button>
+        <button type="button" class="sig-controls" style="all:unset" onclick="setSigMode('${instanceKey}','type')">
+          <span id="sigModeTypeBtn_${instanceKey}" style="background:transparent;border:1px solid var(--border);color:var(--muted);padding:0.3rem 0.7rem;border-radius:6px;font-size:0.78rem;cursor:pointer;font-family:DM Sans,sans-serif;">⌨️ Escribir</span>
+        </button>
+      </div>
+      <div id="sigDrawWrap_${instanceKey}">
+        <canvas id="sigCanvas_${instanceKey}" width="480" height="100" style="width:100%;height:100px;display:block;background:var(--surface2);border-radius:6px;cursor:crosshair;touch-action:none;border:1px solid var(--border)"></canvas>
+        <div style="display:flex;gap:0.5rem;margin-top:0.4rem">
+          <button type="button" onclick="clearSigCanvas('${instanceKey}')" style="background:transparent;border:1px solid var(--border);color:var(--muted);padding:0.25rem 0.6rem;border-radius:6px;font-size:0.75rem;cursor:pointer;font-family:DM Sans,sans-serif;">Limpiar</button>
+        </div>
+      </div>
+      <div id="sigTypeWrap_${instanceKey}" style="display:none">
+        <input type="text" id="sigTypeInput_${instanceKey}" placeholder="Firma sin espacios, mín. 20 caracteres"
+          style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:0.55rem 0.9rem;color:var(--accent);font-family:cursive;font-size:1.15rem;outline:none;"
+          oninput="onSigTypeInput('${instanceKey}')">
+        <div class="sig-char-counter bad" id="sigCounter_${instanceKey}">0/20 caracteres</div>
+      </div>
+    </div>`;
+  sigInstances[instanceKey] = { mode: 'draw', ctx: null, drawing: false, last: null, hasDrawn: false, typedVal: '' };
+  initSigCanvas(instanceKey);
+}
+
+function setSigMode(key, mode) {
+  if(!sigInstances[key]) return;
+  sigInstances[key].mode = mode;
+  document.getElementById('sigDrawWrap_'+key).style.display = mode==='draw' ? 'block' : 'none';
+  document.getElementById('sigTypeWrap_'+key).style.display = mode==='type' ? 'block' : 'none';
+  const dBtn = document.getElementById('sigModeDrawBtn_'+key);
+  const tBtn = document.getElementById('sigModeTypeBtn_'+key);
+  if(dBtn) { dBtn.style.borderColor = mode==='draw' ? 'var(--accent)' : 'var(--border)'; dBtn.style.color = mode==='draw' ? 'var(--accent)' : 'var(--muted)'; }
+  if(tBtn) { tBtn.style.borderColor = mode==='type' ? 'var(--accent)' : 'var(--border)'; tBtn.style.color = mode==='type' ? 'var(--accent)' : 'var(--muted)'; }
+}
+
+function initSigCanvas(key) {
+  const canvas = document.getElementById('sigCanvas_'+key);
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.strokeStyle = '#4facfe'; ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  sigInstances[key].ctx = ctx;
+  const getPos = (c, e) => { const r=c.getBoundingClientRect(); const sx=c.width/r.width; const sy=c.height/r.height; return {x:(e.clientX-r.left)*sx,y:(e.clientY-r.top)*sy}; };
+  canvas.addEventListener('mousedown', e => { sigInstances[key].drawing=true; sigInstances[key].last=getPos(canvas,e); });
+  canvas.addEventListener('mousemove', e => { if(!sigInstances[key].drawing) return; const p=getPos(canvas,e); ctx.beginPath(); ctx.moveTo(sigInstances[key].last.x,sigInstances[key].last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); sigInstances[key].last=p; sigInstances[key].hasDrawn=true; });
+  canvas.addEventListener('mouseup', () => sigInstances[key].drawing=false);
+  canvas.addEventListener('mouseleave', () => sigInstances[key].drawing=false);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); sigInstances[key].drawing=true; sigInstances[key].last=getPos(canvas,e.touches[0]); });
+  canvas.addEventListener('touchmove', e => { e.preventDefault(); if(!sigInstances[key].drawing) return; const p=getPos(canvas,e.touches[0]); ctx.beginPath(); ctx.moveTo(sigInstances[key].last.x,sigInstances[key].last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); sigInstances[key].last=p; sigInstances[key].hasDrawn=true; });
+  canvas.addEventListener('touchend', () => sigInstances[key].drawing=false);
+}
+
+function clearSigCanvas(key) {
+  const canvas = document.getElementById('sigCanvas_'+key);
+  if(!canvas) return;
+  sigInstances[key].ctx.clearRect(0,0,canvas.width,canvas.height);
+  sigInstances[key].hasDrawn = false;
+}
+
+function onSigTypeInput(key) {
+  let val = document.getElementById('sigTypeInput_'+key).value;
+  // Remove spaces
+  val = val.replace(/\s/g, '');
+  document.getElementById('sigTypeInput_'+key).value = val;
+  sigInstances[key].typedVal = val;
+  const counter = document.getElementById('sigCounter_'+key);
+  counter.textContent = val.length + '/20 caracteres';
+  counter.className = 'sig-char-counter ' + (val.length >= 20 ? 'ok' : 'bad');
+}
+
+function validateSig(key) {
+  const inst = sigInstances[key];
+  if(!inst) return { valid: false, msg: 'Firma no iniciada.' };
+  if(inst.mode === 'type') {
+    const v = inst.typedVal;
+    if(v.length < 20) return { valid: false, msg: 'La firma debe tener mínimo 20 caracteres sin espacios.' };
+    return { valid: true, value: v };
+  } else {
+    if(!inst.hasDrawn) return { valid: false, msg: 'Dibuja tu firma en el área indicada.' };
+    return { valid: true, value: 'drawn_sig_'+Date.now() };
+  }
+}
+
+function getSigValue(key) {
+  return validateSig(key);
+}
+
+// =========== INIT ===========
+document.addEventListener('DOMContentLoaded', () => {
+  renderArticles('featuredGrid', DB.getArticles().slice(0,3));
+  renderArticles('allArticlesGrid', DB.getArticles());
+  renderCats();
+  const saved = DB.getSession();
+  if(saved) { currentUser = saved; updateNavAuth(); }
+});
+
+// =========== PAGES ===========
+function showPage(p) {
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+  const el = document.getElementById('page-'+p);
+  if(el) el.classList.add('active');
+  window.scrollTo(0,0);
+  ['navHome','navArticles','navProfile'].forEach(id => document.getElementById(id)?.classList.remove('active'));
+  if(p==='home') document.getElementById('navHome').classList.add('active');
+  if(p==='articles') { document.getElementById('navArticles').classList.add('active'); renderArticles('allArticlesGrid', filterArticles(selectedCat)); }
+  if(p==='profile') { document.getElementById('navProfile').classList.add('active'); fillProfile(); showProfileTab('info'); }
+  if(p==='write') initWritePage();
+  if(p==='login' || p==='register') clearForms();
+}
+
+function requireAuth(p) {
+  if(!currentUser) { showPage('login'); return; }
+  showPage(p);
+}
+function clearForms() {
+  ['loginError','regError'].forEach(id => { const el=document.getElementById(id); if(el) el.classList.remove('show'); });
+}
+
+// =========== ARTICLES ===========
+function filterArticles(cat) {
+  const all = DB.getArticles();
+  return cat==='Todos' ? all : all.filter(a=>a.cat===cat);
+}
+
+function renderArticles(containerId, list) {
+  const c = document.getElementById(containerId);
+  if(!c) return;
+  if(!list.length) { c.innerHTML = '<p style="color:var(--muted);grid-column:1/-1">No hay artículos en esta categoría.</p>'; return; }
+  c.innerHTML = list.map(a => `
+    <div class="article-card" onclick="openArticle(${a.id})">
+      <div class="article-img">${a.emoji}</div>
+      <div class="article-body">
+        <div class="article-tag">${a.tag}</div>
+        <div class="article-title">${a.title}</div>
+        <div class="article-excerpt">${a.excerpt}</div>
+        <div class="article-meta">
+          <div class="article-author"><div class="author-dot">${a.author[0]}</div><span>${a.author}</span></div>
+          <span>${a.date}${a.read ? ' · '+a.read : ''}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function renderCats() {
+  const b = document.getElementById('categoriesBar');
+  if(!b) return;
+  b.innerHTML = CATS.map(c => `<button class="cat-btn${c===selectedCat?' active':''}" onclick="filterCat('${c}')">${c}</button>`).join('');
+}
+
+function filterCat(cat) {
+  selectedCat = cat;
+  renderCats();
+  renderArticles('allArticlesGrid', filterArticles(cat));
+}
+
+function openArticle(id) {
+  const a = DB.getArticles().find(x=>x.id===id);
+  if(!a) return;
+  document.getElementById('detailTag').textContent = a.tag;
+  document.getElementById('detailTitle').textContent = a.title;
+  document.getElementById('detailAuthor').textContent = '✍️ '+a.author;
+  document.getElementById('detailDate').textContent = '📅 '+a.date;
+  document.getElementById('detailRead').textContent = a.read ? '⏱ '+a.read+' lectura' : '';
+  document.getElementById('detailBody').innerHTML = '<div style="font-size:3rem;text-align:center;margin-bottom:1.5rem">'+a.emoji+'</div>'+a.content.map(p=>`<p>${p}</p>`).join('');
+  const editBtn = document.getElementById('editArticleBtn');
+  if(currentUser && a.authorEmail === currentUser.email) {
+    editBtn.style.display = 'inline-block';
+    editingArticleId = id;
+  } else { editBtn.style.display = 'none'; }
+  showPage('article-detail');
+}
+
+// =========== WRITE ARTICLE ===========
+function initWritePage() {
+  const isEdit = !!editingArticleId && document.getElementById('page-write').dataset.editMode === 'true';
+  document.getElementById('writePageTitle').textContent = isEdit ? 'Editar Artículo' : 'Nuevo Artículo';
+  if(!isEdit) {
+    document.getElementById('wTitle').value = '';
+    document.getElementById('wExcerpt').value = '';
+    document.getElementById('wContent').value = '';
+    document.getElementById('wEmoji').value = '🧠';
+    document.getElementById('writeError').classList.remove('show');
+  }
+  createSig('writeSigArea', 'writeArticleSig');
+}
+
+function startEditArticle() {
+  const a = DB.getArticles().find(x=>x.id===editingArticleId);
+  if(!a) return;
+  document.getElementById('page-write').dataset.editMode = 'true';
+  showPage('write');
+  document.getElementById('wTitle').value = a.title;
+  document.getElementById('wExcerpt').value = a.excerpt;
+  document.getElementById('wContent').value = a.content.join('\n\n');
+  document.getElementById('wEmoji').value = a.emoji;
+  document.getElementById('wCat').value = a.cat;
+  document.getElementById('writePageTitle').textContent = 'Editar Artículo';
+  createSig('writeSigArea', 'writeArticleSig');
+}
+
+function submitArticle() {
+  const title = document.getElementById('wTitle').value.trim();
+  const excerpt = document.getElementById('wExcerpt').value.trim();
+  const content = document.getElementById('wContent').value.trim();
+  const emoji = document.getElementById('wEmoji').value.trim() || '📄';
+  const cat = document.getElementById('wCat').value;
+  const err = document.getElementById('writeError');
+  if(!title||!excerpt||!content) { showErr(err,'Completa todos los campos obligatorios.'); return; }
+  const sig = getSigValue('writeArticleSig');
+  if(!sig.valid) { showErr(err, sig.msg); return; }
+  err.classList.remove('show');
+  const isEdit = document.getElementById('page-write').dataset.editMode === 'true';
+  const articles = DB.getArticles();
+  const tagMap = {ML:'Machine Learning',Vision:'Visión Artificial',Robotics:'Robótica',Health:'Salud',Ethics:'Ética IA',Neuro:'Neurotech'};
+  const now = new Date().toLocaleDateString('es-PA',{day:'numeric',month:'short',year:'numeric'});
+  if(isEdit && editingArticleId) {
+    const idx = articles.findIndex(x=>x.id===editingArticleId);
+    if(idx>-1) {
+      articles[idx] = {...articles[idx], title, excerpt, content: content.split(/\n\n+/).filter(Boolean), emoji, cat, tag: tagMap[cat]||cat };
+      DB.addEvent(currentUser.email, 'edit', `Artículo editado: "${title}" (firma: ${sig.value.substring(0,8)}...)`);
+    }
+    document.getElementById('page-write').dataset.editMode = 'false';
+    editingArticleId = null;
+  } else {
+    const newId = Date.now();
+    articles.push({ id: newId, tag: tagMap[cat]||cat, emoji, title, excerpt, author: currentUser.nombre+' '+currentUser.apellido, authorEmail: currentUser.email, date: now, read: Math.ceil(content.split(' ').length/200)+' min', cat, content: content.split(/\n\n+/).filter(Boolean) });
+    DB.addEvent(currentUser.email, 'article', `Artículo publicado: "${title}" (firma: ${sig.value.substring(0,8)}...)`);
+  }
+  DB.saveArticles(articles);
+  renderArticles('featuredGrid', DB.getArticles().slice(0,3));
+  renderArticles('allArticlesGrid', filterArticles(selectedCat));
+  showPage('articles');
+}
+
+// =========== AUTH ===========
+function updateNavAuth() {
+  const loginBtn = document.getElementById('navLoginBtn');
+  const userEl = document.getElementById('navUser');
+  const writeNav = document.getElementById('navWrite');
+  const writeBtn = document.getElementById('writeBtn');
+  if(currentUser) {
+    loginBtn.style.display='none'; userEl.style.display='flex';
+    if(writeNav) writeNav.style.display='inline';
+    if(writeBtn) writeBtn.style.display='inline-block';
+    const initials = (currentUser.nombre[0]+currentUser.apellido[0]).toUpperCase();
+    const navAvatar = document.getElementById('navAvatar');
+    if(currentUser.profilePhotoData) { navAvatar.innerHTML = `<img src="${currentUser.profilePhotoData}" alt="avatar">`; }
+    else { navAvatar.textContent = initials; }
+    document.getElementById('navName').textContent = currentUser.nombre;
+  } else {
+    loginBtn.style.display='block'; userEl.style.display='none';
+    if(writeNav) writeNav.style.display='none';
+    if(writeBtn) writeBtn.style.display='none';
+  }
+}
+
+function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPassword').value;
+  const err = document.getElementById('loginError');
+  if(!email||!pass) { showErr(err,'Completa todos los campos.'); return; }
+  const user = DB.getUser(email);
+  if(!user) { showErr(err,'No existe cuenta con ese correo.'); return; }
+  if(user.password !== btoa(pass)) { showErr(err,'Contraseña incorrecta.'); return; }
+  err.classList.remove('show');
+  pendingUser = user;
+  generatedOTP = Math.floor(100000+Math.random()*900000).toString();
+  document.getElementById('codeInfo').textContent = `Código enviado al teléfono ${maskPhone(user.telefono)} y al correo ${maskEmail(user.email)}. (Demo: ${generatedOTP})`;
+  document.getElementById('secQuestion').textContent = getQuestionLabel(user.secQuestion);
+  showPage('2fa'); setMethod('code'); clearOTP();
+}
+
+function maskPhone(p) { return p ? p.slice(0,-4).replace(/\d/g,'*')+p.slice(-4) : '***'; }
+function maskEmail(e) { return e.replace(/(.{2}).+(@.+)/,'$1***$2'); }
+function getQuestionLabel(v) { const m={mascota:'¿Cuál es el nombre de tu primera mascota?',madre:'¿Cuál es el apellido de soltera de tu madre?',ciudad:'¿En qué ciudad naciste?',colegio:'¿Cuál fue el nombre de tu primer colegio?',amigo:'¿Cuál es el nombre de tu mejor amigo de la infancia?'}; return m[v]||v; }
+function setMethod(m) {
+  document.getElementById('codeMethod').style.display = m==='code'?'block':'none';
+  document.getElementById('qaMethod').style.display = m==='qa'?'block':'none';
+  document.getElementById('methodCode').classList.toggle('active',m==='code');
+  document.getElementById('methodQA').classList.toggle('active',m==='qa');
+}
+function otpNext(i) { const v=document.getElementById('otp'+i).value; if(v&&i<5) document.getElementById('otp'+(i+1)).focus(); }
+function clearOTP() { for(let i=0;i<6;i++) document.getElementById('otp'+i).value=''; document.getElementById('otp0').focus(); }
+function getOTPValue() { return Array.from({length:6},(_,i)=>document.getElementById('otp'+i).value).join(''); }
+function resendCode() { generatedOTP=Math.floor(100000+Math.random()*900000).toString(); document.getElementById('codeInfo').textContent=`Nuevo código generado. (Demo: ${generatedOTP})`; clearOTP(); }
+function verifyCode() { const e=getOTPValue(); if(e.length<6){alert('Ingresa el código completo.');return;} if(e===generatedOTP){completeLogin();}else{alert('Código incorrecto.');clearOTP();} }
+function verifyQA() { const a=document.getElementById('secAnswer').value.trim().toLowerCase(); const err=document.getElementById('qaError'); if(!a){showErr(err,'Ingresa tu respuesta.');return;} if(a===pendingUser.secAnswer.toLowerCase()){err.classList.remove('show');completeLogin();}else{showErr(err,'Respuesta incorrecta.');} }
+function completeLogin() {
+  currentUser = pendingUser; pendingUser = null;
+  DB.saveSession(currentUser);
+  DB.addEvent(currentUser.email, 'login', 'Inicio de sesión exitoso');
+  updateNavAuth(); showPage('home');
+}
+function logout() {
+  if(currentUser) DB.addEvent(currentUser.email,'logout','Sesión cerrada');
+  currentUser = null; DB.clearSession(); updateNavAuth(); showPage('home');
+}
+
+// =========== REGISTER ===========
+let regData = {}, cedFileData = null, profFileData = null;
+
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+}
+
+function handleCedFile(event) {
+  const file = event.target.files[0]; if(!file) return;
+  if(file.size > 1*1024*1024) { alert('La foto de cédula no puede superar 1 MB.'); event.target.value=''; return; }
+  document.getElementById('cedFileName').textContent = file.name;
+  const reader = new FileReader();
+  reader.onload = e => {
+    cedFileData = e.target.result;
+    const prev = document.getElementById('cedPreview');
+    if(file.type.startsWith('image/')) prev.innerHTML = `<img src="${cedFileData}" style="max-width:140px;border-radius:8px;border:1px solid var(--border2)">`;
+    else prev.innerHTML = `<p style="color:var(--success);font-size:0.82rem">✅ PDF cargado: ${file.name}</p>`;
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleProfFile(event) {
+  const file = event.target.files[0]; if(!file) return;
+  if(file.size > 3*1024*1024) { alert('La foto de perfil no puede superar 3 MB.'); event.target.value=''; return; }
+  document.getElementById('profFileName').textContent = file.name;
+  const reader = new FileReader();
+  reader.onload = e => {
+    profFileData = e.target.result;
+    document.getElementById('profPreview').innerHTML = `<img src="${profFileData}" class="profile-photo-preview">`;
+  };
+  reader.readAsDataURL(file);
+}
+
+function showRegStep(n) {
+  [1,2,3,4].forEach(i => {
+    const s=document.getElementById('regStep'+i); if(s) s.style.display=i===n?'block':'none';
+    const st=document.getElementById('step'+i);
+    if(st){st.classList.toggle('active',i===n);st.classList.toggle('done',i<n);}
+  });
+}
+
+function regNext1() {
+  const vals = {};
+  ['rNombre','rApellido','rCedula','rEmail','rFecha','rTelefono','rPassword','rPassword2'].forEach(f => vals[f]=document.getElementById(f).value.trim());
+  const err = document.getElementById('regError');
+  if(!vals.rNombre||!vals.rApellido||!vals.rCedula||!vals.rEmail||!vals.rFecha||!vals.rTelefono||!vals.rPassword) { showErr(err,'Completa todos los campos obligatorios.'); return; }
+  if(!validateEmail(vals.rEmail)) { showErr(err,'Correo inválido. Debe contener @ y dominio válido.'); document.getElementById('emailErr').classList.add('show'); return; }
+  document.getElementById('emailErr').classList.remove('show');
+  if(vals.rPassword.length < 8) { showErr(err,'La contraseña debe tener al menos 8 caracteres.'); return; }
+  if(vals.rPassword !== vals.rPassword2) { showErr(err,'Las contraseñas no coinciden.'); return; }
+  if(DB.getUser(vals.rEmail)) { showErr(err,'Ya existe una cuenta con ese correo.'); return; }
+  err.classList.remove('show');
+  regData = { ...vals };
+  showRegStep(2);
+}
+
+function regNext2() {
+  const err = document.getElementById('regError');
+  if(!cedFileData) { showErr(err,'Debes subir la foto de tu cédula.'); return; }
+  err.classList.remove('show');
+  showRegStep(3);
+}
+
+function regNext3() {
+  const ans = document.getElementById('rSecAnswer').value.trim();
+  const err = document.getElementById('regError');
+  if(!ans) { showErr(err,'Ingresa tu respuesta de seguridad.'); return; }
+  err.classList.remove('show');
+  regData.secQuestion = document.getElementById('rSecQuestion').value;
+  regData.secAnswer = ans;
+  showRegStep(4);
+  createSig('regSigContainer','regSig');
+}
+
+function doRegister() {
+  const chk = document.getElementById('chkTerms').checked;
+  const err = document.getElementById('regError');
+  if(!chk) { showErr(err,'Debes aceptar los términos y condiciones.'); return; }
+  const sig = getSigValue('regSig');
+  if(!sig.valid) { showErr(err, sig.msg); return; }
+  err.classList.remove('show');
+  const user = {
+    nombre: regData.rNombre, apellido: regData.rApellido, cedula: regData.rCedula,
+    email: regData.rEmail, telefono: regData.rTelefono, fecha: regData.rFecha,
+    password: btoa(regData.rPassword), secQuestion: regData.secQuestion, secAnswer: regData.secAnswer,
+    termsAccepted: true, sigType: sigInstances['regSig']?.mode || 'type',
+    sigValue: sig.value, cedFileData: cedFileData, profilePhotoData: profFileData || null,
+    registroDate: new Date().toLocaleDateString('es-PA')
+  };
+  DB.saveUser(user);
+  DB.addEvent(user.email,'register','Cuenta creada con firma electrónica');
+  currentUser = user; DB.saveSession(user);
+  updateNavAuth(); showPage('success');
+}
+
+// =========== PROFILE ===========
+function fillProfile() {
+  if(!currentUser) return;
+  const u = currentUser;
+  const initials = (u.nombre[0]+u.apellido[0]).toUpperCase();
+  const avatarEl = document.getElementById('profileAvatarLg');
+  if(u.profilePhotoData) avatarEl.innerHTML = `<img src="${u.profilePhotoData}" alt="perfil">`;
+  else avatarEl.textContent = initials;
+  document.getElementById('profileFullName').textContent = u.nombre+' '+u.apellido;
+  document.getElementById('profileEmail').textContent = u.email;
+  ['Nombre','Apellido','Email','Telefono','Fecha','Registro'].forEach(k => {
+    const el = document.getElementById('pf'+k);
+    if(el) el.textContent = k==='Registro' ? (u.registroDate||'—') : (u[k.toLowerCase()]||'—');
+  });
+  document.getElementById('pfCedula').textContent = u.cedula||'—';
+  const cedDoc = document.getElementById('pfCedDoc');
+  if(u.cedFileData && u.cedFileData.startsWith('data:image')) cedDoc.innerHTML = `<img src="${u.cedFileData}" style="max-width:120px;border-radius:8px;border:1px solid var(--border2)">`;
+  else if(u.cedFileData) cedDoc.textContent = '✅ Documento cargado (PDF)';
+  else cedDoc.textContent = '—';
+  const profPhotoEl = document.getElementById('pfProfPhoto');
+  if(u.profilePhotoData) profPhotoEl.innerHTML = `<img src="${u.profilePhotoData}" class="profile-photo-preview">`;
+  else profPhotoEl.textContent = 'No cargada';
+  fillMyArticles();
+  fillEvents();
+}
+
+function fillMyArticles() {
+  if(!currentUser) return;
+  const mine = DB.getArticles().filter(a=>a.authorEmail===currentUser.email);
+  const el = document.getElementById('myArticlesList');
+  if(!mine.length) { el.innerHTML = '<p style="color:var(--muted);font-size:0.9rem">Aún no has publicado artículos.</p>'; return; }
+  el.innerHTML = mine.map(a => `
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius2);padding:1rem;margin-bottom:0.8rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap">
+      <div>
+        <span style="font-size:1.2rem;margin-right:0.5rem">${a.emoji}</span>
+        <strong style="font-size:0.95rem">${a.title}</strong>
+        <p style="color:var(--muted);font-size:0.82rem;margin-top:0.2rem">${a.tag} · ${a.date}</p>
+      </div>
+      <div style="display:flex;gap:0.5rem">
+        <button class="edit-btn" onclick="editFromProfile(${a.id})">✏️ Editar</button>
+      </div>
+    </div>`).join('');
+}
+
+function editFromProfile(id) {
+  editingArticleId = id;
+  document.getElementById('page-write').dataset.editMode = 'true';
+  showPage('write');
+  const a = DB.getArticles().find(x=>x.id===id);
+  if(a) {
+    document.getElementById('wTitle').value = a.title;
+    document.getElementById('wExcerpt').value = a.excerpt;
+    document.getElementById('wContent').value = a.content.join('\n\n');
+    document.getElementById('wEmoji').value = a.emoji;
+    document.getElementById('wCat').value = a.cat;
+    document.getElementById('writePageTitle').textContent = 'Editar Artículo';
+    createSig('writeSigArea','writeArticleSig');
+  }
+}
+
+function fillEvents() {
+  if(!currentUser) return;
+  const evs = DB.getEvents(currentUser.email);
+  const tbody = document.getElementById('eventsTableBody');
+  if(!evs.length) { tbody.innerHTML = '<tr><td colspan="4" style="color:var(--muted);text-align:center;padding:2rem">Sin eventos registrados.</td></tr>'; return; }
+  const typeClass = { login:'ev-login',register:'ev-register',edit:'ev-edit',article:'ev-article',logout:'ev-logout' };
+  const typeLabel = { login:'Inicio sesión',register:'Registro',edit:'Edición',article:'Publicación',logout:'Cierre sesión' };
+  tbody.innerHTML = evs.map(e => `<tr>
+    <td style="font-size:0.8rem;white-space:nowrap">${e.ts}</td>
+    <td><span class="event-badge ${typeClass[e.type]||'ev-login'}">${typeLabel[e.type]||e.type}</span></td>
+    <td style="color:var(--muted);font-size:0.82rem">${e.detail}</td>
+    <td style="font-family:monospace;font-size:0.78rem;color:var(--muted)">${e.ip}</td>
+  </tr>`).join('');
+}
+
+function showProfileTab(tab) {
+  ['info','security','articles','events'].forEach(t => {
+    const el = document.getElementById('ptab-'+t);
+    if(el) el.style.display = t===tab ? 'block' : 'none';
+  });
+  document.querySelectorAll('.ptab').forEach((btn,i) => {
+    const tabs = ['info','security','articles','events'];
+    btn.classList.toggle('active', tabs[i]===tab);
+  });
+  if(tab==='events') fillEvents();
+  if(tab==='articles') fillMyArticles();
+}
+
+// =========== EDIT MODAL ===========
+function openEditModal(type) {
+  pendingEditType = type;
+  const modal = document.getElementById('editModal');
+  const title = document.getElementById('editModalTitle');
+  const content = document.getElementById('editModalContent');
+  document.getElementById('editError').classList.remove('show');
+  if(type === 'personal') {
+    title.textContent = 'Editar Información Personal';
+    content.innerHTML = `
+      <div class="form-row">
+        <div class="form-group"><label>Nombre</label><input type="text" id="editNombre" value="${currentUser.nombre}"></div>
+        <div class="form-group"><label>Apellido</label><input type="text" id="editApellido" value="${currentUser.apellido}"></div>
+      </div>
+      <div class="form-group"><label>Cédula</label><input type="text" id="editCedula" value="${currentUser.cedula||''}"></div>
+      <div class="form-group"><label>Teléfono</label><input type="tel" id="editTelefono" value="${currentUser.telefono}"></div>`;
+  } else if(type === 'password') {
+    title.textContent = 'Cambiar Contraseña';
+    content.innerHTML = `
+      <div class="form-group"><label>Nueva Contraseña</label><input type="password" id="editNewPass" placeholder="Mínimo 8 caracteres"></div>
+      <div class="form-group"><label>Confirmar Contraseña</label><input type="password" id="editNewPass2" placeholder="Repite la contraseña"></div>`;
+  }
+  createSig('editSigContainer','editSig');
+  modal.classList.add('show');
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').classList.remove('show');
+  pendingEditType = null;
+}
+
+function confirmEdit() {
+  const err = document.getElementById('editError');
+  const sig = getSigValue('editSig');
+  if(!sig.valid) { showErr(err, sig.msg); return; }
+  if(pendingEditType === 'personal') {
+    const nombre = document.getElementById('editNombre').value.trim();
+    const apellido = document.getElementById('editApellido').value.trim();
+    const cedula = document.getElementById('editCedula').value.trim();
+    const telefono = document.getElementById('editTelefono').value.trim();
+    if(!nombre||!apellido||!cedula||!telefono) { showErr(err,'Completa todos los campos.'); return; }
+    currentUser.nombre = nombre; currentUser.apellido = apellido; currentUser.cedula = cedula; currentUser.telefono = telefono;
+    DB.saveUser(currentUser); DB.saveSession(currentUser);
+    DB.addEvent(currentUser.email,'edit',`Perfil editado (firma: ${sig.value.substring(0,8)}...)`);
+  } else if(pendingEditType === 'password') {
+    const np = document.getElementById('editNewPass').value;
+    const np2 = document.getElementById('editNewPass2').value;
+    if(np.length < 8) { showErr(err,'La contraseña debe tener al menos 8 caracteres.'); return; }
+    if(np !== np2) { showErr(err,'Las contraseñas no coinciden.'); return; }
+    currentUser.password = btoa(np);
+    DB.saveUser(currentUser); DB.saveSession(currentUser);
+    DB.addEvent(currentUser.email,'edit','Contraseña cambiada con firma electrónica');
+  }
+  updateNavAuth();
+  closeEditModal();
+  fillProfile();
+  const ok = document.createElement('div');
+  ok.className = 'alert alert-success show';
+  ok.textContent = '✅ Cambios guardados exitosamente.';
+  ok.style.cssText = 'position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;max-width:300px;';
+  document.body.appendChild(ok);
+  setTimeout(() => ok.remove(), 3000);
+}
+
+// =========== UTILS ===========
+function showErr(el, msg) { el.textContent = msg; el.classList.add('show'); }
+</script>
+</body>
+</html>
